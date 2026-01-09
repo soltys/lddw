@@ -1,21 +1,4 @@
-#ifndef LDDS_FW_H
-#define LDDS_FW_H
-
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <windows.h>
-
-#include <errno.h>
-#include <psapi.h>
-#include <tchar.h>
-#include <tlhelp32.h>
-
-#include <unistd.h>
+#pragma once
 
 #undef ERROR
 
@@ -35,5 +18,3 @@
 #define malloc(size) HeapAlloc(GetProcessHeap(), 0, size)
 #define free(ptr) HeapFree(GetProcessHeap(), 0, ptr)
 #define realloc(ptr, size) HeapReAlloc(GetProcessHeap(), 0, ptr, size)
-
-#endif

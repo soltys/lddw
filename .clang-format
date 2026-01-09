@@ -1,6 +1,4 @@
-BasedOnStyle: Microsoft
-BraceBeforeBraces: Custom
-BraceWrapping:
-    AfterCaseLabel: true
-    AfterUnion: true
-IndentCaseLabels: true
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 120
+
