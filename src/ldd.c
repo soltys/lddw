@@ -1,6 +1,7 @@
 #include "ldd.h"
 #include "dict.h"
 #include "fw.h"
+#include "ldd_args.h"
 #include "log.h"
 
 #include <Psapi.h>
@@ -107,7 +108,7 @@ static int impl_static_ldd(ldd_args args, const LPCVOID fdat, const LPCWSTR fnam
             LPCSTR namea = (LPCSTR)((ULONG_PTR)fdat + rva2offset(impDesc->Name, secH, ntH));
 
             // determine if library is Windows API sets
-            if ((strncmp("ext-", namea, 4) == 0 || strncmp("api-", namea, 4) == 0) && !args.bViewAll)
+            if (!args.view_all && (strncmp("ext-", namea, 4) == 0 || strncmp("api-", namea, 4) == 0))
                 continue;
 
             MultiByteToWideChar(CP_UTF8, 0, namea, strlen(namea) + 1, namew, MAX_PATH_W);
@@ -122,14 +123,23 @@ static int impl_static_ldd(ldd_args args, const LPCVOID fdat, const LPCWSTR fnam
 
         int found = findlib(namew, fpath, MAX_PATH_W);
 
-        if (args.output_format == OUTPUT_LIST) {
-            pmsgw(namew);
-            pmsg(" => ");
-            pmsgw((found == 0) ? fpath : L"NotFound");
-            pmsg("\n");
-        } else if (args.output_format == OUTPUT_CMAKE) {
-            pmsgw(fpath);
-            pmsg(";");
+        bool show_library = true;
+        if (args.contains != NULL) {
+            if (found == 0) {
+                show_library = wcsstr(fpath, args.contains) != NULL;
+            }
+        }
+
+        if (show_library) {
+            if (args.format == FORMAT_LIST) {
+                pmsgw(namew);
+                pmsg(" => ");
+                pmsgw((found == 0) ? fpath : L"NotFound");
+                pmsg("\n");
+            } else if (args.format == FORMAT_CMAKE) {
+                pmsgw(fpath);
+                pmsg(";");
+            }
         }
 
         // recurse listing

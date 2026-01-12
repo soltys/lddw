@@ -29,24 +29,15 @@ if(PROJECT_IS_TOP_LEVEL)
     endif()
 endif()
 
-add_library(liblddw
-   "src/dict.c" 
-    "src/ldd.c"
-    "src/log.c"
-    "src/args.c"
-    "src/ldd_args.c"
-)
+add_library(liblddw "src/dict.c" "src/ldd.c" "src/log.c" "src/ldd_args.c")
 add_library(lddw::lib ALIAS liblddw)
 
-add_executable(
-    lddw
-    "src/main.c" 
-)
+add_executable(lddw "src/main.c")
 target_link_libraries(lddw lddw::lib)
 
 if(MSVC)
-    set_property(        
-       DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    set_property(
+        DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         PROPERTY VS_STARTUP_PROJECT lddw
     )
     set_property(
@@ -57,3 +48,4 @@ endif()
 
 enable_testing()
 add_subdirectory("tests")
+

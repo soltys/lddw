@@ -54,7 +54,7 @@ int test_add_env(test_context *t, const char *name) {
     return 0;
 }
 
-const char *test_read_env(const test_context* t, const char *name) {
+const char *test_read_env(const test_context *t, const char *name) {
     for (int i = 0; i < t->env_size; i++) {
         if (strcmp(t->env[i]->name, name) == 0) {
             return t->env[i]->value;
@@ -63,7 +63,7 @@ const char *test_read_env(const test_context* t, const char *name) {
     return NULL;
 }
 
-int _test_error(const test_context* t, const char *file, int line, const char *format, ...) {
+int _test_error(const test_context *t, const char *file, int line, const char *format, ...) {
     va_list argptr;
     va_start(argptr, format);
     fprintf(stderr, "ERROR: [%s][%s]\n", t->suit_name, t->test_name);
@@ -80,15 +80,20 @@ int _run_test_suite(const char *test_suite_name, const test_func_reg *test_funct
     for (int i = 0; i < test_size; i++) {
 
         test_func_reg test_func_reg = test_functions[i];
-        printf("TEST: %s \n", test_func_reg.test_name);
+        printf("TEST: %s ", test_func_reg.test_name);
 
         test_context test_context = {
             .suit_name = test_suite_name, .test_name = test_func_reg.test_name, .env = NULL, .env_size = 0};
         int ret = test_func_reg.test_function(&test_context);
         test_context_free(&test_context);
         if (ret != 0) {
+            printf("FAILED");
             return ret;
+        } else {
+            printf("OK");
         }
+
+        printf("\n");
     }
     return 0;
 }

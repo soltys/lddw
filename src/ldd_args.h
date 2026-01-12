@@ -1,15 +1,16 @@
 #pragma once
 #include <stdbool.h>
 #include <windows.h>
-typedef  enum {
-    OUTPUT_LIST,
-    OUTPUT_CMAKE,
+#include <winnt.h>
+typedef enum {
+    FORMAT_LIST,
+    FORMAT_CMAKE,
 
-}output_format;
+} output_format;
 typedef struct {
-    bool bFlatten;
-    bool bViewAll;
-    output_format output_format;
+    bool view_all;
+    output_format format;
+    LPWSTR contains;
 } ldd_args;
 
 typedef enum {
